@@ -1,0 +1,23 @@
+[
+    {
+      "client_id": 2,
+      "pdf_paths": ["uploads/1c4511e4-5add-4060-ab22-f6a291c95902_coffee_brewing_guide.pdf"],
+      "question": "what water temperature should I use",
+      "expected_contains": "195"
+    },
+    {
+      "client_id": 2,
+      "pdf_paths": ["uploads/b608f32b-a02a-45d4-ac80-d2239708719d_iso27001.pdf"],
+      "question": "what does an information security management system preserve",
+      "expected_contains": "confidentiality"
+    },
+    {
+      "client_id": 2,
+      "pdf_paths": [
+        "uploads/1c4511e4-5add-4060-ab22-f6a291c95902_coffee_brewing_guide.pdf",
+        "uploads/b608f32b-a02a-45d4-ac80-d2239708719d_iso27001.pdf"
+      ],
+      "question": "what water temperature should I use",
+      "expected_contains": "195"
+    }
+  ]
