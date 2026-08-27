@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 
-export default function ChatPanel({ apiKey, documentPaths }) {
+export default function ChatPanel({ apiKey }) {
   const [question, setQuestion] = useState('')
   const [answer, setAnswer] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -9,7 +9,7 @@ export default function ChatPanel({ apiKey, documentPaths }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!question.trim() || !apiKey || documentPaths.length === 0 || isLoading) return
+    if (!question.trim() || !apiKey || isLoading) return
 
     setIsLoading(true)
     setError('')
@@ -22,7 +22,6 @@ export default function ChatPanel({ apiKey, documentPaths }) {
           'X-API-Key': apiKey,
         },
         body: JSON.stringify({
-          pdf_paths: documentPaths,
           question: question,
         }),
       })

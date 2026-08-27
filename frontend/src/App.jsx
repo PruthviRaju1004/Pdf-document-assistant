@@ -21,7 +21,7 @@ function App() {
           Active documents: {documents.map((d) => d.filename).join(', ')}
         </div>
       )}
-      <ChatPanel apiKey={apiKey} documentPaths={documents.map((d) => d.path)} />
+      <ChatPanel apiKey={apiKey} />
     </div>
   )
 }

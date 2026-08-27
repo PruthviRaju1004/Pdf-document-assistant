@@ -83,6 +83,17 @@ def get_document_owner(file_path: str):
     conn.close()
     return result
 
+def get_documents_for_client(client_id: int):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT filename, file_path FROM documents WHERE client_id = %s;",
+        (client_id,),
+    )
+    results = cursor.fetchall()
+    conn.close()
+    return results
+
 def search_chunks_for_client(client_id: int, pdf_paths: list[str], query_text: str, top_k: int = 5, max_distance: float = 0.6):
     query_embedding = model.encode(query_text).tolist()
     conn = get_connection()

@@ -9,6 +9,7 @@ from .pdf_extractor import extract_pages
 from .pdf_chunker import chunk_pages
 from .db import get_client_by_api_key, get_document_owner, insert_document, insert_chunk, compute_file_hash, get_document_by_hash
 from .guardrails import contains_injection_attempt
+from .tool_agent import ask_with_tools
 
 app = FastAPI()
 app.add_middleware(
@@ -21,7 +22,6 @@ UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 class AskRequest(BaseModel):
-    pdf_paths: list[str]
     question: str
 
 @app.get("/")
@@ -80,18 +80,8 @@ def upload_pdf(file: UploadFile = File(...), client_id: int = Depends(get_curren
 
 @app.post("/ask")
 def ask_endpoint(request: AskRequest, client_id: int = Depends(get_current_client)):
-    for pdf_path in request.pdf_paths:
-        owner = get_document_owner(pdf_path)
-        if owner is None:
-            raise HTTPException(status_code=404, detail=f"Document not found: {pdf_path}")
-        document_id, owner_client_id = owner
-        if owner_client_id != client_id:
-            raise HTTPException(status_code=403, detail=f"You do not have access to: {pdf_path}")
     if contains_injection_attempt(request.question):
         raise HTTPException(status_code=400, detail="Your question contains content that looks like a prompt injection attempt.")
-    answer = search_multiple_docs(
-        client_id=client_id,
-        pdf_paths=request.pdf_paths,
-        question=request.question,
-    )
+
+    answer = ask_with_tools(client_id=client_id, question=request.question)
     return {"answer": answer}
